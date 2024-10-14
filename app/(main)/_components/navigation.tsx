@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import {
@@ -31,6 +31,7 @@ import { useSetting } from "@/hooks/use-settings";
 import { Navbar } from "./navbar";
 
 export const Navigation = () => {
+  const router = useRouter();
   const params = useParams();
   const settings = useSetting();
   const search = useSearch();
@@ -116,7 +117,9 @@ export const Navigation = () => {
   };
 
   const handleCreate = () => {
-    const promise = create({ title: "Untitled" });
+    const promise = create({ title: "Untitled" }).then((documentId) =>
+      router.push(`/documents/${documentId}`)
+    );
 
     toast.promise(promise, {
       loading: "Creating a new note...",
@@ -176,10 +179,7 @@ export const Navigation = () => {
         )}
       >
         {!!params.documentId ? (
-          <Navbar 
-          isCollapsed = {isCollapsed}
-          onResetWidth = {resetWidth}
-          />
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
         ) : (
           <nav className="w-full px-3 py-2 bg-transparent">
             {isCollapsed && (

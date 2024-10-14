@@ -5,14 +5,18 @@ import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/clerk-react";
 import { useMutation } from "convex/react";
 import { PlusCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const DocumentsPage = () => {
+  const router = useRouter();
   const create = useMutation(api.documents.create);
   const { user } = useUser();
 
   const onCreate = () => {
-    const promise = create({ title: "Untitled" });
+    const promise = create({ title: "Untitled" }).then((documentId) =>
+      router.push(`/documents/${documentId}`)
+    );
 
     toast.promise(promise, {
       loading: "Creating a new note...",
@@ -21,7 +25,7 @@ const DocumentsPage = () => {
     });
   };
   return (
-    <div className="flex items-center justify-center flex-col h-full space-y-4">
+    <div className="flex items-center justify-center flex-col h-full w-full space-y-4">
       <p className="font-medium text-xl">
         Welcome {user?.fullName}&apos; in Notion.
       </p>
