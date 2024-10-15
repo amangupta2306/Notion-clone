@@ -37,7 +37,7 @@ export const Cover = ({ url, preview }: CoverProps) => {
   return (
     <div
       className={cn(
-        "h-[35vh] w-full relative group",
+        "h-[35vh] w-full relative group mt-10",
         !url && "h-[12vh]",
         url && "bg-muted"
       )}
